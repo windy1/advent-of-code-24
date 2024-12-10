@@ -23,6 +23,23 @@ fn count_safe_reports(reports: &[Vec<i32>]) -> i32 {
 }
 
 fn is_safe_report(report: &[i32]) -> bool {
+    if _is_safe_report(report) {
+        return true;
+    }
+
+    for i in 0..report.len() {
+        let mut report_copy = report.to_vec();
+        report_copy.remove(i);
+
+        if _is_safe_report(&report_copy) {
+            return true;
+        }
+    }
+
+    false
+}
+
+fn _is_safe_report(report: &[i32]) -> bool {
     let mut trend = ReportTrend::None;
 
     for window in report.windows(2) {
