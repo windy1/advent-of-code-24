@@ -1,0 +1,6 @@
+[workspace]
+resolver = "2"
+members = [
+    "d1-historian-hysteria",
+    "d2-red-nosed-reports",
+]
