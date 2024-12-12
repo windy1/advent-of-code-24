@@ -1,4 +1,4 @@
-use std::fs;
+use std::{cmp, fs};
 
 struct XmasWordPuzzle {
     grid: Grid,
@@ -6,6 +6,7 @@ struct XmasWordPuzzle {
 
 impl XmasWordPuzzle {
     const WORD_XMAS: &'static str = "XMAS";
+    const WORD_MAS: &'static str = "MAS";
 
     fn new(grid: Grid) -> Self {
         XmasWordPuzzle { grid }
@@ -29,7 +30,29 @@ impl XmasWordPuzzle {
     }
 
     fn count_x_mas_at(&self, x: usize, y: usize) -> usize {
-        todo!()
+        let mut count = 0;
+        let word = Self::WORD_MAS;
+        let word_reversed = word.chars().rev().collect::<String>();
+
+        let has_top_left = x as i32 > 0 && y as i32 > 0;
+        let has_bottom_left = x as i32 > 0 && y + 1 < self.grid.height;
+
+        // println!("({}, {})", x, y);
+        // self.print_slice(x, y, 10);
+
+        let has_diagonal_1 = has_top_left
+            && (self.find_bottom_right_diagonal(x - 1, y - 1, word)
+                || self.find_bottom_right_diagonal(x - 1, y - 1, &word_reversed));
+
+        let has_diagonal_2 = has_bottom_left
+            && (self.find_top_right_diagonal(x - 1, y + 1, word)
+                || self.find_top_right_diagonal(x - 1, y + 1, &word_reversed));
+
+        if has_diagonal_1 && has_diagonal_2 {
+            count += 1;
+        }
+
+        count
     }
 
     fn count_xmas_at(&self, x: usize, y: usize) -> usize {
@@ -113,19 +136,47 @@ impl XmasWordPuzzle {
     }
 
     fn find_top_right_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
-        self.find_str(x, y, 1, 1, word)
-    }
-
-    fn find_bottom_right_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
         self.find_str(x, y, 1, -1, word)
     }
 
+    fn find_bottom_right_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, 1, 1, word)
+    }
+
     fn find_top_left_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
-        self.find_str(x, y, -1, 1, word)
+        self.find_str(x, y, -1, -1, word)
     }
 
     fn find_bottom_left_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
-        self.find_str(x, y, -1, -1, word)
+        self.find_str(x, y, -1, 1, word)
+    }
+
+    #[allow(dead_code)]
+    fn print_slice(&self, x: usize, y: usize, padding: usize) {
+        let start_x = cmp::max(x as i32 - padding as i32, 0) as usize;
+        let start_y = cmp::max(y as i32 - padding as i32, 0) as usize;
+        let end_x = cmp::min(x + padding, self.grid.width - 1);
+        let end_y = cmp::min(y + padding, self.grid.height - 1);
+
+        let cell_width = 3;
+
+        for cy in start_y..=end_y {
+            for cx in start_x..=end_x {
+                let is_current_position = cx == x && cy == y;
+
+                if is_current_position {
+                    print!(
+                        "{:^width$}",
+                        format!("[{}]", self.grid.data[cy][cx]),
+                        width = cell_width
+                    );
+                } else {
+                    print!("{:^width$}", self.grid.data[cy][cx], width = cell_width);
+                }
+            }
+
+            println!();
+        }
     }
 }
 
@@ -168,5 +219,5 @@ fn main() {
     let puzzle = XmasWordPuzzle::new(grid);
 
     println!("Solution (Part 1): {}", puzzle.count_xmas());
-    // println!("Solution (Part 2): {}", puzzle.count_x_mas());
+    println!("Solution (Part 2): {}", puzzle.count_x_mas());
 }
