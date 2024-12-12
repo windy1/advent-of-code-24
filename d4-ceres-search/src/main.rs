@@ -5,6 +5,8 @@ struct XmasWordPuzzle {
 }
 
 impl XmasWordPuzzle {
+    const WORD_XMAS: &'static str = "XMAS";
+
     fn new(grid: Grid) -> Self {
         XmasWordPuzzle { grid }
     }
@@ -33,35 +35,35 @@ impl XmasWordPuzzle {
     fn count_xmas_at(&self, x: usize, y: usize) -> usize {
         let mut count = 0;
 
-        if self.check_left_to_right(x, y) {
+        if self.find_left_to_right(x, y, Self::WORD_XMAS) {
             count += 1;
         }
 
-        if self.check_right_to_left(x, y) {
+        if self.find_right_to_left(x, y, Self::WORD_XMAS) {
             count += 1;
         }
 
-        if self.check_top_to_bottom(x, y) {
+        if self.find_top_to_bottom(x, y, Self::WORD_XMAS) {
             count += 1;
         }
 
-        if self.check_bottom_to_top(x, y) {
+        if self.find_bottom_to_top(x, y, Self::WORD_XMAS) {
             count += 1;
         }
 
-        if self.check_top_right_diagonal(x, y) {
+        if self.find_top_right_diagonal(x, y, Self::WORD_XMAS) {
             count += 1;
         }
 
-        if self.check_bottom_right_diagonal(x, y) {
+        if self.find_bottom_right_diagonal(x, y, Self::WORD_XMAS) {
             count += 1;
         }
 
-        if self.check_top_left_diagonal(x, y) {
+        if self.find_top_left_diagonal(x, y, Self::WORD_XMAS) {
             count += 1;
         }
 
-        if self.check_bottom_left_diagonal(x, y) {
+        if self.find_bottom_left_diagonal(x, y, Self::WORD_XMAS) {
             count += 1;
         }
 
@@ -71,104 +73,59 @@ impl XmasWordPuzzle {
     fn find_str(&self, x: usize, y: usize, dx: i32, dy: i32, word: &str) -> bool {
         let mut x = x as i32;
         let mut y = y as i32;
+
         let word_len = word.len() as i32;
+        let tail = word_len - 1;
 
-        let has_horizontal_space =
-            x + word_len * dx >= 0 && x + word_len * dx < self.grid.width as i32;
+        let has_horizontal_space = x + tail * dx >= 0 && x + tail * dx < self.grid.width as i32;
+        let has_vertical_space = y + tail * dy >= 0 && y + tail * dy < self.grid.height as i32;
 
-        if !has_horizontal_space {
+        if !has_horizontal_space || !has_vertical_space {
             return false;
         }
 
-        todo!()
+        for c in word.chars() {
+            if self.grid.data[y as usize][x as usize] != c {
+                return false;
+            }
+
+            x += dx;
+            y += dy;
+        }
+
+        true
     }
 
-    fn check_left_to_right(&self, x: usize, y: usize) -> bool {
-        if x + 3 >= self.grid.width {
-            return false;
-        }
-
-        self.grid.data[y][x] == 'X'
-            && self.grid.data[y][x + 1] == 'M'
-            && self.grid.data[y][x + 2] == 'A'
-            && self.grid.data[y][x + 3] == 'S'
+    fn find_left_to_right(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, 1, 0, word)
     }
 
-    fn check_right_to_left(&self, x: usize, y: usize) -> bool {
-        if x < 3 {
-            return false;
-        }
-
-        self.grid.data[y][x] == 'X'
-            && self.grid.data[y][x - 1] == 'M'
-            && self.grid.data[y][x - 2] == 'A'
-            && self.grid.data[y][x - 3] == 'S'
+    fn find_right_to_left(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, -1, 0, word)
     }
 
-    fn check_top_to_bottom(&self, x: usize, y: usize) -> bool {
-        if y + 3 >= self.grid.height {
-            return false;
-        }
-
-        self.grid.data[y][x] == 'X'
-            && self.grid.data[y + 1][x] == 'M'
-            && self.grid.data[y + 2][x] == 'A'
-            && self.grid.data[y + 3][x] == 'S'
+    fn find_top_to_bottom(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, 0, 1, word)
     }
 
-    fn check_bottom_to_top(&self, x: usize, y: usize) -> bool {
-        if y < 3 {
-            return false;
-        }
-
-        self.grid.data[y][x] == 'X'
-            && self.grid.data[y - 1][x] == 'M'
-            && self.grid.data[y - 2][x] == 'A'
-            && self.grid.data[y - 3][x] == 'S'
+    fn find_bottom_to_top(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, 0, -1, word)
     }
 
-    fn check_top_right_diagonal(&self, x: usize, y: usize) -> bool {
-        if x + 3 >= self.grid.width || y + 3 >= self.grid.height {
-            return false;
-        }
-
-        self.grid.data[y][x] == 'X'
-            && self.grid.data[y + 1][x + 1] == 'M'
-            && self.grid.data[y + 2][x + 2] == 'A'
-            && self.grid.data[y + 3][x + 3] == 'S'
+    fn find_top_right_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, 1, 1, word)
     }
 
-    fn check_bottom_right_diagonal(&self, x: usize, y: usize) -> bool {
-        if x + 3 >= self.grid.width || y < 3 {
-            return false;
-        }
-
-        self.grid.data[y][x] == 'X'
-            && self.grid.data[y - 1][x + 1] == 'M'
-            && self.grid.data[y - 2][x + 2] == 'A'
-            && self.grid.data[y - 3][x + 3] == 'S'
+    fn find_bottom_right_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, 1, -1, word)
     }
 
-    fn check_top_left_diagonal(&self, x: usize, y: usize) -> bool {
-        if x < 3 || y + 3 >= self.grid.height {
-            return false;
-        }
-
-        self.grid.data[y][x] == 'X'
-            && self.grid.data[y + 1][x - 1] == 'M'
-            && self.grid.data[y + 2][x - 2] == 'A'
-            && self.grid.data[y + 3][x - 3] == 'S'
+    fn find_top_left_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, -1, 1, word)
     }
 
-    fn check_bottom_left_diagonal(&self, x: usize, y: usize) -> bool {
-        if x < 3 || y < 3 {
-            return false;
-        }
-
-        self.grid.data[y][x] == 'X'
-            && self.grid.data[y - 1][x - 1] == 'M'
-            && self.grid.data[y - 2][x - 2] == 'A'
-            && self.grid.data[y - 3][x - 3] == 'S'
+    fn find_bottom_left_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
+        self.find_str(x, y, -1, -1, word)
     }
 }
 
