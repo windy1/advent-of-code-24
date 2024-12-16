@@ -13,18 +13,18 @@ impl XmasWordPuzzle {
     }
 
     fn count_x_mas(&self) -> usize {
-        self.coordinate_iter()
+        self.coordinates_iter()
             .map(|(x, y)| self.count_x_mas_at(x, y))
             .sum()
     }
 
     fn count_xmas(&self) -> usize {
-        self.coordinate_iter()
+        self.coordinates_iter()
             .map(|(x, y)| self.count_xmas_at(x, y))
             .sum()
     }
 
-    fn coordinate_iter(&self) -> impl Iterator<Item = (usize, usize)> + use<'_> {
+    fn coordinates_iter(&self) -> impl Iterator<Item = (usize, usize)> + use<'_> {
         let Grid { width, height, .. } = &self.grid;
         (0..*height).flat_map(move |y| (0..*width).map(move |x| (x, y)))
     }

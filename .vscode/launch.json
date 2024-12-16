@@ -1,156 +1,148 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'd1-historian-hysteria'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=d1-historian-hysteria",
-                    "--package=d1-historian-hysteria"
-                ],
-                "filter": {
-                    "name": "d1-historian-hysteria",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in executable 'd1-historian-hysteria'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=d1-historian-hysteria",
-                    "--package=d1-historian-hysteria"
-                ],
-                "filter": {
-                    "name": "d1-historian-hysteria",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'd2-red-nosed-reports'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=d2-red-nosed-reports",
-                    "--package=d2-red-nosed-reports"
-                ],
-                "filter": {
-                    "name": "d2-red-nosed-reports",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in executable 'd2-red-nosed-reports'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=d2-red-nosed-reports",
-                    "--package=d2-red-nosed-reports"
-                ],
-                "filter": {
-                    "name": "d2-red-nosed-reports",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'd3-mull-it-over'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=d3-mull-it-over",
-                    "--package=d3-mull-it-over"
-                ],
-                "filter": {
-                    "name": "d3-mull-it-over",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in executable 'd3-mull-it-over'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=d3-mull-it-over",
-                    "--package=d3-mull-it-over"
-                ],
-                "filter": {
-                    "name": "d3-mull-it-over",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'd4-ceres-search'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=d4-ceres-search",
-                    "--package=d4-ceres-search"
-                ],
-                "filter": {
-                    "name": "d4-ceres-search",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in executable 'd4-ceres-search'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=d4-ceres-search",
-                    "--package=d4-ceres-search"
-                ],
-                "filter": {
-                    "name": "d4-ceres-search",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'd1-historian-hysteria'",
+      "cargo": {
+        "args": [
+          "build",
+          "--bin=d1-historian-hysteria",
+          "--package=d1-historian-hysteria"
+        ],
+        "filter": {
+          "name": "d1-historian-hysteria",
+          "kind": "bin"
         }
-    ]
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'd1-historian-hysteria'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=d1-historian-hysteria",
+          "--package=d1-historian-hysteria"
+        ],
+        "filter": {
+          "name": "d1-historian-hysteria",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'd2-red-nosed-reports'",
+      "cargo": {
+        "args": [
+          "build",
+          "--bin=d2-red-nosed-reports",
+          "--package=d2-red-nosed-reports"
+        ],
+        "filter": {
+          "name": "d2-red-nosed-reports",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'd2-red-nosed-reports'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=d2-red-nosed-reports",
+          "--package=d2-red-nosed-reports"
+        ],
+        "filter": {
+          "name": "d2-red-nosed-reports",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'd3-mull-it-over'",
+      "cargo": {
+        "args": ["build", "--bin=d3-mull-it-over", "--package=d3-mull-it-over"],
+        "filter": {
+          "name": "d3-mull-it-over",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'd3-mull-it-over'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=d3-mull-it-over",
+          "--package=d3-mull-it-over"
+        ],
+        "filter": {
+          "name": "d3-mull-it-over",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'd4-ceres-search'",
+      "cargo": {
+        "args": ["build", "--bin=d4-ceres-search", "--package=d4-ceres-search"],
+        "filter": {
+          "name": "d4-ceres-search",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'd4-ceres-search'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=d4-ceres-search",
+          "--package=d4-ceres-search"
+        ],
+        "filter": {
+          "name": "d4-ceres-search",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
 }
