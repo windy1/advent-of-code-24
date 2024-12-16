@@ -1,7 +1,6 @@
 [package]
-name = "d4-ceres-search"
+name = "aoc24"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-aoc24 = { path = "../aoc24" }

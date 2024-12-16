@@ -1,9 +1,11 @@
 [workspace]
 resolver = "2"
 members = [
+    "aoc24",
     "d1-historian-hysteria",
     "d2-red-nosed-reports",
     "d3-mull-it-over",
     "d4-ceres-search",
     "d5-print-queue",
+    "d6-guard-gallivant",
 ]

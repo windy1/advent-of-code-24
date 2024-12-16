@@ -1,3 +1,4 @@
+use aoc24::grid::Grid;
 use std::{cmp, fs};
 
 struct XmasWordPuzzle {
@@ -25,8 +26,8 @@ impl XmasWordPuzzle {
     }
 
     fn coordinates_iter(&self) -> impl Iterator<Item = (usize, usize)> + use<'_> {
-        let Grid { width, height, .. } = &self.grid;
-        (0..*height).flat_map(move |y| (0..*width).map(move |x| (x, y)))
+        let grid = &self.grid;
+        (0..grid.height()).flat_map(move |y| (0..grid.width()).map(move |x| (x, y)))
     }
 
     fn count_x_mas_at(&self, x: usize, y: usize) -> usize {
@@ -35,7 +36,7 @@ impl XmasWordPuzzle {
         let word_reversed = word.chars().rev().collect::<String>();
 
         let has_top_left = x as i32 > 0 && y as i32 > 0;
-        let has_bottom_left = x as i32 > 0 && y + 1 < self.grid.height;
+        let has_bottom_left = x as i32 > 0 && y + 1 < self.grid.height();
 
         // println!("({}, {})", x, y);
         // self.print_slice(x, y, 10);
@@ -100,15 +101,15 @@ impl XmasWordPuzzle {
         let word_len = word.len() as i32;
         let tail = word_len - 1;
 
-        let has_horizontal_space = x + tail * dx >= 0 && x + tail * dx < self.grid.width as i32;
-        let has_vertical_space = y + tail * dy >= 0 && y + tail * dy < self.grid.height as i32;
+        let has_horizontal_space = x + tail * dx >= 0 && x + tail * dx < self.grid.width() as i32;
+        let has_vertical_space = y + tail * dy >= 0 && y + tail * dy < self.grid.height() as i32;
 
         if !has_horizontal_space || !has_vertical_space {
             return false;
         }
 
         for c in word.chars() {
-            if self.grid.data[y as usize][x as usize] != c {
+            if self.grid.get(x as usize, y as usize) != c {
                 return false;
             }
 
@@ -155,8 +156,8 @@ impl XmasWordPuzzle {
     fn print_slice(&self, x: usize, y: usize, padding: usize) {
         let start_x = cmp::max(x as i32 - padding as i32, 0) as usize;
         let start_y = cmp::max(y as i32 - padding as i32, 0) as usize;
-        let end_x = cmp::min(x + padding, self.grid.width - 1);
-        let end_y = cmp::min(y + padding, self.grid.height - 1);
+        let end_x = cmp::min(x + padding, self.grid.width() - 1);
+        let end_y = cmp::min(y + padding, self.grid.height() - 1);
 
         let cell_width = 3;
 
@@ -167,48 +168,16 @@ impl XmasWordPuzzle {
                 if is_current_position {
                     print!(
                         "{:^width$}",
-                        format!("[{}]", self.grid.data[cy][cx]),
+                        format!("[{}]", self.grid.get(cx, cy)),
                         width = cell_width
                     );
                 } else {
-                    print!("{:^width$}", self.grid.data[cy][cx], width = cell_width);
+                    print!("{:^width$}", self.grid.get(cx, cy), width = cell_width);
                 }
             }
 
             println!();
         }
-    }
-}
-
-struct Grid {
-    width: usize,
-    height: usize,
-    data: Vec<Vec<char>>,
-}
-
-impl Grid {
-    fn new(width: usize, height: usize) -> Self {
-        Grid {
-            width,
-            height,
-            data: vec![vec!['?'; width]; height],
-        }
-    }
-}
-
-impl From<&str> for Grid {
-    fn from(input: &str) -> Self {
-        let width = input.lines().next().unwrap().len();
-        let height = input.lines().count();
-        let mut grid = Grid::new(width, height);
-
-        for (y, line) in input.lines().enumerate() {
-            for (x, c) in line.chars().enumerate() {
-                grid.data[y][x] = c;
-            }
-        }
-
-        grid
     }
 }
 

@@ -36,6 +36,42 @@ impl PrintRules {
         true
     }
 
+    fn sort(&self, update: Vec<i32>) -> Vec<i32> {
+        let mut sorted_update = update.clone();
+
+        for current_page_index in 0..update.len() {
+            let current_page = update[current_page_index];
+            let previous_page_rules = self.previous_page_rules(current_page);
+            let next_page_rules = self.next_page_rules(current_page);
+
+            for previous_page_index in 0..current_page_index {
+                let previous_page = update[previous_page_index];
+                let should_be_before_current_page = previous_page_rules
+                    .iter()
+                    .any(|rule| rule[0] == previous_page);
+
+                if !should_be_before_current_page {
+                    sorted_update.swap(previous_page_index, current_page_index);
+                    return self.sort(sorted_update);
+                }
+            }
+
+            for next_page_index in current_page_index + 1..update.len() {
+                let next_page = update[next_page_index];
+
+                let should_be_after_current_page =
+                    next_page_rules.iter().any(|rule| rule[1] == next_page);
+
+                if !should_be_after_current_page {
+                    sorted_update.swap(next_page_index, current_page_index);
+                    return self.sort(sorted_update);
+                }
+            }
+        }
+
+        sorted_update
+    }
+
     fn previous_page_rules(&self, page: i32) -> Vec<&PrintRule> {
         self.rules.iter().filter(|rule| rule[1] == page).collect()
     }
@@ -102,5 +138,26 @@ fn main() {
         }
     }
 
-    println!("Solution: {}", acc);
+    println!("Solution (Part 1): {}", acc);
+
+    let invalid_updates = print_updates
+        .updates
+        .iter()
+        .filter(|update| !print_rules.verify_update(update.to_vec()))
+        .collect::<Vec<&Vec<i32>>>();
+
+    let fixed_updates = invalid_updates
+        .iter()
+        .map(|update| print_rules.sort(update.to_vec()))
+        .collect::<Vec<Vec<i32>>>();
+
+    acc = 0;
+
+    for update in &fixed_updates {
+        acc += update[update.len() / 2];
+    }
+
+    // 123 is too low
+
+    println!("Solution (Part 2): {}", acc);
 }
