@@ -14,20 +14,17 @@ impl XmasWordPuzzle {
     }
 
     fn count_x_mas(&self) -> usize {
-        self.coordinates_iter()
+        self.grid
+            .coordinates_iter()
             .map(|(x, y)| self.count_x_mas_at(x, y))
             .sum()
     }
 
     fn count_xmas(&self) -> usize {
-        self.coordinates_iter()
+        self.grid
+            .coordinates_iter()
             .map(|(x, y)| self.count_xmas_at(x, y))
             .sum()
-    }
-
-    fn coordinates_iter(&self) -> impl Iterator<Item = (usize, usize)> + use<'_> {
-        let grid = &self.grid;
-        (0..grid.height()).flat_map(move |y| (0..grid.width()).map(move |x| (x, y)))
     }
 
     fn count_x_mas_at(&self, x: usize, y: usize) -> usize {
@@ -150,34 +147,6 @@ impl XmasWordPuzzle {
 
     fn find_bottom_left_diagonal(&self, x: usize, y: usize, word: &str) -> bool {
         self.find_str(x, y, -1, 1, word)
-    }
-
-    #[allow(dead_code)]
-    fn print_slice(&self, x: usize, y: usize, padding: usize) {
-        let start_x = cmp::max(x as i32 - padding as i32, 0) as usize;
-        let start_y = cmp::max(y as i32 - padding as i32, 0) as usize;
-        let end_x = cmp::min(x + padding, self.grid.width() - 1);
-        let end_y = cmp::min(y + padding, self.grid.height() - 1);
-
-        let cell_width = 3;
-
-        for cy in start_y..=end_y {
-            for cx in start_x..=end_x {
-                let is_current_position = cx == x && cy == y;
-
-                if is_current_position {
-                    print!(
-                        "{:^width$}",
-                        format!("[{}]", self.grid.get(cx, cy)),
-                        width = cell_width
-                    );
-                } else {
-                    print!("{:^width$}", self.grid.get(cx, cy), width = cell_width);
-                }
-            }
-
-            println!();
-        }
     }
 }
 

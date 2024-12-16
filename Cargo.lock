@@ -44,6 +44,9 @@ version = "0.1.0"
 [[package]]
 name = "d6-guard-gallivant"
 version = "0.1.0"
+dependencies = [
+ "aoc24",
+]
 
 [[package]]
 name = "memchr"
