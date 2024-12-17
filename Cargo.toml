@@ -8,4 +8,5 @@ members = [
     "d4-ceres-search",
     "d5-print-queue",
     "d6-guard-gallivant",
+    "d7-bridge-repair",
 ]
