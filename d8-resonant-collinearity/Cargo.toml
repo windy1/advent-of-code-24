@@ -1,0 +1,9 @@
+[package]
+name = "d8-resonant-collinearity"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aoc24 = { path = "../aoc24" }
+euclid = "0.22.11"
+itertools = "0.13.0"

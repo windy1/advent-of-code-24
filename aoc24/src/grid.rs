@@ -8,11 +8,17 @@ pub struct Grid {
 }
 
 impl Grid {
+    const DEFAULT_CHAR: char = '?';
+
     pub fn new(width: usize, height: usize) -> Self {
+        Grid::new_with_default_char(width, height, Self::DEFAULT_CHAR)
+    }
+
+    pub fn new_with_default_char(width: usize, height: usize, default_char: char) -> Self {
         Grid {
             width,
             height,
-            data: vec![vec!['?'; width]; height],
+            data: vec![vec![default_char; width]; height],
         }
     }
 
@@ -26,6 +32,10 @@ impl Grid {
 
     pub fn size(&self) -> usize {
         self.width * self.height
+    }
+
+    pub fn contains(&self, x: f32, y: f32) -> bool {
+        x >= 0.0 && x < self.width as f32 && y >= 0.0 && y < self.height as f32
     }
 
     pub fn get(&self, x: usize, y: usize) -> char {
