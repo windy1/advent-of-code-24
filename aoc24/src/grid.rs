@@ -24,6 +24,10 @@ impl Grid {
         self.height
     }
 
+    pub fn size(&self) -> usize {
+        self.width * self.height
+    }
+
     pub fn get(&self, x: usize, y: usize) -> char {
         self.data[y][x]
     }
@@ -34,6 +38,10 @@ impl Grid {
 
     pub fn coordinates_iter(&self) -> impl Iterator<Item = (usize, usize)> + use<'_> {
         (0..self.height()).flat_map(move |y| (0..self.width()).map(move |x| (x, y)))
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &char> {
+        self.data.iter().flat_map(|row| row.iter())
     }
 
     pub fn print_slice(&self, x: usize, y: usize, padding: usize) {
@@ -61,6 +69,20 @@ impl Grid {
 
             println!();
         }
+    }
+}
+
+impl Clone for Grid {
+    fn clone(&self) -> Self {
+        let mut new_grid = Grid::new(self.width(), self.height());
+
+        for y in 0..self.height() {
+            for x in 0..self.width() {
+                new_grid.set(x, y, self.get(x, y));
+            }
+        }
+
+        new_grid
     }
 }
 

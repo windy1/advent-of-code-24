@@ -1,5 +1,5 @@
 use aoc24::grid::Grid;
-use std::{cmp, fs};
+use std::fs;
 
 struct XmasWordPuzzle {
     grid: Grid,
