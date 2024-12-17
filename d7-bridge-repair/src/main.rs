@@ -9,13 +9,21 @@ struct Equation {
 impl Equation {
     const OPERATOR_ADD: &str = "+";
     const OPERATOR_MULTIPLY: &str = "*";
+    const OPERATOR_CONCAT: &str = "||";
+
     const OPERATORS_PART_1: [&str; 2] = [Self::OPERATOR_ADD, Self::OPERATOR_MULTIPLY];
 
-    fn is_valid(&self) -> Result<bool, String> {
+    const OPERATORS_PART_2: [&str; 3] = [
+        Self::OPERATOR_ADD,
+        Self::OPERATOR_MULTIPLY,
+        Self::OPERATOR_CONCAT,
+    ];
+
+    fn is_valid(&self, operators: &[&str]) -> Result<bool, String> {
         let num_operators = self.operands.len() - 1;
 
         let operator_permutations = (0..num_operators)
-            .map(|_| Self::OPERATORS_PART_1.iter().copied())
+            .map(|_| operators.iter().copied())
             .multi_cartesian_product();
 
         for operators in operator_permutations {
@@ -57,6 +65,11 @@ impl Equation {
         let result = match operator {
             Self::OPERATOR_ADD => lhs + rhs,
             Self::OPERATOR_MULTIPLY => lhs * rhs,
+            Self::OPERATOR_CONCAT => {
+                let mut result = lhs.to_string();
+                result.push_str(&rhs.to_string());
+                result.parse::<i64>().unwrap()
+            }
             _ => return Err("Invalid operator".into()),
         };
 
@@ -96,12 +109,19 @@ fn main() {
     let file_path = "./d7-bridge-repair/input.txt";
     let contents = fs::read_to_string(file_path).unwrap();
 
-    let solution = contents
-        .lines()
-        .map(Equation::from)
-        .filter(|e| e.is_valid().unwrap())
+    let equations = contents.lines().map(Equation::from);
+
+    let solution_p1 = equations
+        .clone()
+        .filter(|e| e.is_valid(&Equation::OPERATORS_PART_1).unwrap())
         .map(|e| e.test_value)
         .sum::<i64>();
 
-    println!("Solution: {}", solution);
+    let solution_p2 = equations
+        .filter(|e| e.is_valid(&Equation::OPERATORS_PART_2).unwrap())
+        .map(|e| e.test_value)
+        .sum::<i64>();
+
+    println!("Solution (Part 1): {}", solution_p1);
+    println!("Solution (Part 2): {}", solution_p2);
 }
