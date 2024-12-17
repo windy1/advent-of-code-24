@@ -7,15 +7,15 @@ struct Equation {
 }
 
 impl Equation {
-    const OPERATOR_ADD: char = '+';
-    const OPERATOR_MULTIPLY: char = '*';
-    const OPERATORS: [char; 2] = [Self::OPERATOR_ADD, Self::OPERATOR_MULTIPLY];
+    const OPERATOR_ADD: &str = "+";
+    const OPERATOR_MULTIPLY: &str = "*";
+    const OPERATORS_PART_1: [&str; 2] = [Self::OPERATOR_ADD, Self::OPERATOR_MULTIPLY];
 
     fn is_valid(&self) -> Result<bool, String> {
         let num_operators = self.operands.len() - 1;
 
         let operator_permutations = (0..num_operators)
-            .map(|_| Self::OPERATORS.iter())
+            .map(|_| Self::OPERATORS_PART_1.iter().copied())
             .multi_cartesian_product();
 
         for operators in operator_permutations {
@@ -30,7 +30,7 @@ impl Equation {
         Ok(false)
     }
 
-    fn print_with_operators(&self, operators: &[&char]) {
+    fn print_with_operators(&self, operators: &[&str]) {
         print!("{}: ", self.test_value);
 
         for (i, operand) in self.operands.iter().enumerate() {
@@ -44,7 +44,7 @@ impl Equation {
         println!(" \u{2713}");
     }
 
-    fn is_valid_with_operators(&self, operators: &[&char]) -> Result<bool, String> {
+    fn is_valid_with_operators(&self, operators: &[&str]) -> Result<bool, String> {
         // Operators are evaluated from left to right not in normal order of operations
         if operators.is_empty() {
             return Ok(self.test_value == self.operands[0]);
@@ -54,7 +54,7 @@ impl Equation {
         let rhs = self.operands[1];
         let operator = operators[0];
 
-        let result = match *operator {
+        let result = match operator {
             Self::OPERATOR_ADD => lhs + rhs,
             Self::OPERATOR_MULTIPLY => lhs * rhs,
             _ => return Err("Invalid operator".into()),
