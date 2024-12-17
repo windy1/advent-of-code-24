@@ -5,7 +5,7 @@ use std::{collections::HashSet, fs};
 
 use aoc24::grid::Grid;
 
-type Point2d = Point2D<f32, f32>;
+type Point2d = Point2D<i32, i32>;
 
 #[derive(Builder)]
 struct FrequencyAnalyzerOptions {
@@ -75,7 +75,7 @@ impl FrequencyAnalyzer {
         self.frequency_grid
             .coordinates_iter()
             .filter(|(x, y)| self.frequency_grid.get(*x, *y) == *frequency)
-            .map(|(x, y)| Point2d::new(x as f32, y as f32))
+            .map(|(x, y)| Point2d::new(x as i32, y as i32))
             .collect()
     }
 
@@ -87,32 +87,32 @@ impl FrequencyAnalyzer {
     }
 
     fn find_anti_nodes(&self, p1: Point2d, p2: Point2d) -> Vec<Point2d> {
-        let direction = (p2 - p1).normalize();
+        let dx = p2.x - p1.x;
+        let dy = p2.y - p1.y;
+        let gcd = num::integer::gcd(dx, dy);
+        let step_x = dx / gcd;
+        let step_y = dy / gcd;
 
         if !self.options.has_resonant_harmonics_detector {
-            let distance = p1.distance_to(p2);
-            return self.filter_anti_nodes(&[p1 - direction * distance, p2 + direction * distance]);
+            let distance = gcd;
+            let extended_p1 = Point2d::new(p1.x - step_x * distance, p1.y - step_y * distance);
+            let extended_p2 = Point2d::new(p2.x + step_x * distance, p2.y + step_y * distance);
+
+            return self.filter_anti_nodes(&[extended_p1, extended_p2]);
         }
 
-        let mut distance = 1.0;
         let mut anti_nodes = vec![];
+        let mut current = p1;
 
-        let mut debug_grid = self.frequency_grid.clone();
-        debug_grid.set(p1.x as usize, p2.y as usize, 'X');
-        debug_grid.set(p2.x as usize, p2.y as usize, 'Y');
+        while self.anti_nodes_grid.contains(current.x, current.y) {
+            anti_nodes.push(current);
+            current = Point2d::new(current.x - step_x, current.y - step_y);
+        }
 
-        println!("{}", debug_grid);
-
-        loop {
-            let nodes = [p1 - direction * distance, p2 + direction * distance];
-            let nodes = self.filter_anti_nodes(&nodes);
-
-            if nodes.is_empty() {
-                break;
-            }
-
-            anti_nodes.extend(nodes);
-            distance += 1.0;
+        current = p2;
+        while self.anti_nodes_grid.contains(current.x, current.y) {
+            anti_nodes.push(current);
+            current = Point2d::new(current.x + step_x, current.y + step_y);
         }
 
         anti_nodes
@@ -127,22 +127,22 @@ impl FrequencyAnalyzer {
     }
 }
 
-// fn main() {
-//     let file_path = "./d8-resonant-collinearity/input_example.txt";
-//     let contents = fs::read_to_string(file_path).unwrap();
-//     let grid = Grid::from(contents.as_str());
-
-//     let mut analyzer = FrequencyAnalyzer::new(grid);
-
-//     let num_anti_nodes = analyzer.analyze();
-//     println!("Solution: {}", num_anti_nodes);
-// }
-
 fn main() {
-    let file_path = "./d8-resonant-collinearity/input_example.txt";
+    let file_path = "./d8-resonant-collinearity/input.txt";
     let contents = fs::read_to_string(file_path).unwrap();
     let grid = Grid::from(contents.as_str());
 
+    part1(grid.clone());
+    part2(grid);
+}
+
+fn part1(grid: Grid) {
+    let mut analyzer = FrequencyAnalyzer::new(grid);
+    let num_anti_nodes = analyzer.analyze();
+    println!("Solution (Part 1): {}", num_anti_nodes);
+}
+
+fn part2(grid: Grid) {
     let options = FrequencyAnalyzerOptions::builder()
         .has_resonant_harmonics_detector(true)
         .build();
@@ -151,6 +151,5 @@ fn main() {
 
     let num_anti_nodes = analyzer.analyze();
 
-    println!("{}", analyzer.anti_nodes_grid);
     println!("Solution (Part 2): {}", num_anti_nodes);
 }

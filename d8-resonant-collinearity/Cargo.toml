@@ -8,3 +8,4 @@ aoc24 = { path = "../aoc24" }
 bon = "3.3.0"
 euclid = "0.22.11"
 itertools = "0.13.0"
+num = "0.4.3"

@@ -34,8 +34,8 @@ impl Grid {
         self.width * self.height
     }
 
-    pub fn contains(&self, x: f32, y: f32) -> bool {
-        x >= 0.0 && x < self.width as f32 && y >= 0.0 && y < self.height as f32
+    pub fn contains(&self, x: i32, y: i32) -> bool {
+        x >= 0 && x < self.width as i32 && y >= 0 && y < self.height as i32
     }
 
     pub fn get(&self, x: usize, y: usize) -> char {
@@ -100,12 +100,10 @@ impl Display for Grid {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         for row in &self.data {
             for c in row {
-                write!(f, "{}", c)?;
+                write!(f, "{:>3}", c)?;
             }
-
             writeln!(f)?;
         }
-
         Ok(())
     }
 }
