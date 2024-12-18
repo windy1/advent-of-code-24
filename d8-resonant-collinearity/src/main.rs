@@ -40,7 +40,7 @@ impl FrequencyAnalyzer {
 
         FrequencyAnalyzer {
             frequency_grid: grid,
-            anti_nodes_grid: Grid::new_with_default_char(width, height, Self::DEFAULT_GRID_CHAR),
+            anti_nodes_grid: Grid::with_default_char(width, height, Self::DEFAULT_GRID_CHAR),
             options,
         }
     }

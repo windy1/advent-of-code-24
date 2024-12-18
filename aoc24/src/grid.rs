@@ -11,10 +11,10 @@ impl Grid {
     const DEFAULT_CHAR: char = '?';
 
     pub fn new(width: usize, height: usize) -> Self {
-        Grid::new_with_default_char(width, height, Self::DEFAULT_CHAR)
+        Grid::with_default_char(width, height, Self::DEFAULT_CHAR)
     }
 
-    pub fn new_with_default_char(width: usize, height: usize, default_char: char) -> Self {
+    pub fn with_default_char(width: usize, height: usize, default_char: char) -> Self {
         Grid {
             width,
             height,
@@ -48,6 +48,23 @@ impl Grid {
 
     pub fn coordinates_iter(&self) -> impl Iterator<Item = (usize, usize)> + use<'_> {
         (0..self.height()).flat_map(move |y| (0..self.width()).map(move |x| (x, y)))
+    }
+
+    pub fn neighbors_iter(
+        &self,
+        x: usize,
+        y: usize,
+    ) -> impl Iterator<Item = (usize, usize)> + use<'_> {
+        let x = x as i32;
+        let y = y as i32;
+
+        let deltas = vec![(0, -1), (1, 0), (0, 1), (-1, 0)];
+
+        deltas
+            .into_iter()
+            .map(move |(dx, dy)| (x + dx, y + dy))
+            .filter(move |(nx, ny)| self.contains(*nx, *ny))
+            .map(|(nx, ny)| (nx as usize, ny as usize))
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &char> {

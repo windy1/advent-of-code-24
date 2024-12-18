@@ -11,4 +11,5 @@ members = [
     "d7-bridge-repair",
     "d8-resonant-collinearity",
     "d9-disk-fragmenter",
+    "d10-hoof-it",
 ]
