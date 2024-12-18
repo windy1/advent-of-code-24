@@ -10,4 +10,5 @@ members = [
     "d6-guard-gallivant",
     "d7-bridge-repair",
     "d8-resonant-collinearity",
+    "d9-disk-fragmenter",
 ]
