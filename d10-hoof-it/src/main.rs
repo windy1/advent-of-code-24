@@ -4,11 +4,15 @@ use aoc24::grid::Grid;
 
 struct TrailMap {
     data: Grid,
+    distinct_mode: bool,
 }
 
 impl TrailMap {
     fn new(data: Grid) -> Self {
-        TrailMap { data }
+        TrailMap {
+            data,
+            distinct_mode: false,
+        }
     }
 
     fn calc_score(&self) -> usize {
@@ -24,11 +28,13 @@ impl TrailMap {
         y: usize,
         visited: &mut HashSet<(usize, usize)>,
     ) -> usize {
-        if visited.contains(&(x, y)) {
-            return 0;
-        }
+        if !self.distinct_mode {
+            if visited.contains(&(x, y)) {
+                return 0;
+            }
 
-        visited.insert((x, y));
+            visited.insert((x, y));
+        }
 
         if self.get_height_at(x, y) == 9 {
             return 1;
@@ -67,7 +73,11 @@ impl TrailMap {
 fn main() {
     let file_path = "./d10-hoof-it/input.txt";
     let contents = fs::read_to_string(file_path).unwrap();
-    let map = TrailMap::new(Grid::from(contents.as_str()));
+    let mut map = TrailMap::new(Grid::from(contents.as_str()));
 
-    println!("Solution: {}", map.calc_score());
+    println!("Solution (Part 1): {}", map.calc_score());
+
+    map.distinct_mode = true;
+
+    println!("Solution (Part 2): {}", map.calc_score());
 }
