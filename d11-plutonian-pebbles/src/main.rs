@@ -16,10 +16,7 @@ impl MagicStones {
                 continue;
             }
 
-            let stone_str = stone.to_string();
-
-            if stone_str.len() % 2 == 0 {
-                let (left, right) = self.split_stone(stone_str.as_str());
+            if let Some((left, right)) = self.split_stone(stone) {
                 new_data.push(left);
                 new_data.push(right);
                 continue;
@@ -31,11 +28,18 @@ impl MagicStones {
         self.data = new_data;
     }
 
-    fn split_stone(&self, stone_str: &str) -> (usize, usize) {
-        let mid = stone_str.len() / 2;
-        let left = stone_str[..mid].parse::<usize>().unwrap();
-        let right = stone_str[mid..].parse::<usize>().unwrap();
-        (left, right)
+    fn split_stone(&self, stone: usize) -> Option<(usize, usize)> {
+        let digits = (stone as f32).log10().floor() as usize + 1;
+
+        if digits % 2 != 0 {
+            return None;
+        }
+
+        let divisor = 10usize.pow(digits as u32 / 2);
+        let left = stone / divisor;
+        let right = stone % divisor;
+
+        Some((left, right))
     }
 }
 
@@ -50,13 +54,27 @@ impl From<&str> for MagicStones {
     }
 }
 
+// fn main() {
+//     let file_path = "./d11-plutonian-pebbles/input.txt";
+//     let contents = fs::read_to_string(file_path).unwrap().trim().to_string();
+//     let mut magic_stones = MagicStones::from(contents.as_str());
+
+//     for i in 0..25 {
+//         magic_stones.blink();
+//         println!("Blink #{}: {}", i + 1, magic_stones.data.len());
+//     }
+
+//     println!("Solution: {}", magic_stones.data.len());
+// }
+
 fn main() {
     let file_path = "./d11-plutonian-pebbles/input.txt";
     let contents = fs::read_to_string(file_path).unwrap().trim().to_string();
     let mut magic_stones = MagicStones::from(contents.as_str());
 
-    for _ in 0..25 {
+    for i in 0..75 {
         magic_stones.blink();
+        println!("Blink #{}: {}", i + 1, magic_stones.data.len());
     }
 
     println!("Solution: {}", magic_stones.data.len());
