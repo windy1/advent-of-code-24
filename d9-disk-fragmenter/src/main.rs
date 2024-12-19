@@ -1,6 +1,6 @@
 use std::{fmt, fs};
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 struct Disk {
     data: Vec<Option<u32>>,
     max_block_id: u32,
@@ -91,15 +91,6 @@ impl Disk {
         }
 
         None
-    }
-}
-
-impl Clone for Disk {
-    fn clone(&self) -> Self {
-        Disk {
-            data: self.data.clone(),
-            max_block_id: self.max_block_id,
-        }
     }
 }
 
