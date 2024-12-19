@@ -1,31 +1,36 @@
-use std::fs;
+use std::{collections::HashMap, fs};
 
+#[derive(Clone)]
 struct MagicStones {
-    data: Vec<usize>,
+    data: HashMap<usize, usize>,
 }
 
 impl MagicStones {
     const MULTIPLIER: usize = 2024;
 
     fn blink(&mut self) {
-        let mut new_data = vec![];
+        let mut new_data = HashMap::new();
 
-        for &stone in self.data.iter() {
+        for (&stone, &count) in self.data.iter() {
             if stone == 0 {
-                new_data.push(1);
+                *new_data.entry(1).or_insert(0) += count;
                 continue;
             }
 
             if let Some((left, right)) = self.split_stone(stone) {
-                new_data.push(left);
-                new_data.push(right);
+                *new_data.entry(left).or_insert(0) += count;
+                *new_data.entry(right).or_insert(0) += count;
                 continue;
             }
 
-            new_data.push(stone * Self::MULTIPLIER);
+            *new_data.entry(stone * Self::MULTIPLIER).or_insert(0) += count;
         }
 
         self.data = new_data;
+    }
+
+    fn len(&self) -> usize {
+        self.data.values().sum()
     }
 
     fn split_stone(&self, stone: usize) -> Option<(usize, usize)> {
@@ -45,37 +50,44 @@ impl MagicStones {
 
 impl From<&str> for MagicStones {
     fn from(s: &str) -> Self {
-        MagicStones {
-            data: s
-                .split_whitespace()
-                .map(|x| x.parse::<usize>().unwrap())
-                .collect(),
+        let stones = s
+            .split_whitespace()
+            .map(|x| x.parse::<usize>().unwrap())
+            .collect::<Vec<_>>();
+
+        let mut data = HashMap::new();
+
+        for stone in stones {
+            *data.entry(stone).or_insert(0) += 1;
         }
+
+        MagicStones { data }
     }
 }
-
-// fn main() {
-//     let file_path = "./d11-plutonian-pebbles/input.txt";
-//     let contents = fs::read_to_string(file_path).unwrap().trim().to_string();
-//     let mut magic_stones = MagicStones::from(contents.as_str());
-
-//     for i in 0..25 {
-//         magic_stones.blink();
-//         println!("Blink #{}: {}", i + 1, magic_stones.data.len());
-//     }
-
-//     println!("Solution: {}", magic_stones.data.len());
-// }
 
 fn main() {
     let file_path = "./d11-plutonian-pebbles/input.txt";
     let contents = fs::read_to_string(file_path).unwrap().trim().to_string();
-    let mut magic_stones = MagicStones::from(contents.as_str());
+    let magic_stones = MagicStones::from(contents.as_str());
 
+    part1(magic_stones.clone());
+    part2(magic_stones);
+}
+
+fn part1(mut magic_stones: MagicStones) {
+    for i in 0..25 {
+        magic_stones.blink();
+        println!("Blink #{}: {}", i + 1, magic_stones.data.len());
+    }
+
+    println!("Solution (Part 1): {}", magic_stones.len());
+}
+
+fn part2(mut magic_stones: MagicStones) {
     for i in 0..75 {
         magic_stones.blink();
         println!("Blink #{}: {}", i + 1, magic_stones.data.len());
     }
 
-    println!("Solution: {}", magic_stones.data.len());
+    println!("Solution (Part 2): {}", magic_stones.len());
 }
