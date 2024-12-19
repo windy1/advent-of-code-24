@@ -12,4 +12,5 @@ members = [
     "d8-resonant-collinearity",
     "d9-disk-fragmenter",
     "d10-hoof-it",
+    "d11-plutonian-pebbles",
 ]
