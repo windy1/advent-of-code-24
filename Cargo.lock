@@ -66,6 +66,10 @@ name = "d2-red-nosed-reports"
 version = "0.1.0"
 
 [[package]]
+name = "d22-monkey-market"
+version = "0.1.0"
+
+[[package]]
 name = "d3-mull-it-over"
 version = "0.1.0"
 dependencies = [
