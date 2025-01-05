@@ -25,10 +25,46 @@ impl Robots {
     }
 
     fn simulate(&mut self, seconds: i32) {
-        for _ in 0..seconds {
-            // println!("{}", self);
+        for i in 0..seconds {
+            println!("{}s", i);
+
+            if self.has_cluster() {
+                println!("{}:\n{}", i, self);
+            }
+
             self.simulate_second();
         }
+    }
+
+    fn has_cluster(&self) -> bool {
+        const SCAN_WIDTH: i32 = 4;
+        const SCAN_HEIGHT: i32 = 4;
+
+        for x in 0..self.width {
+            for y in 0..self.height {
+                let mut is_cluster = true;
+
+                'scan: for dx in 0..SCAN_WIDTH {
+                    for dy in 0..SCAN_HEIGHT {
+                        let occupied = self
+                            .value
+                            .iter()
+                            .any(|robot| robot.x == x + dx && robot.y == y + dy);
+
+                        if !occupied {
+                            is_cluster = false;
+                            break 'scan;
+                        }
+                    }
+                }
+
+                if is_cluster {
+                    return true;
+                }
+            }
+        }
+
+        false
     }
 
     fn simulate_second(&mut self) {
@@ -124,17 +160,17 @@ fn main() {
     let file_path = "./d14-restroom-redoubt/input.txt";
     let contents = fs::read_to_string(file_path).unwrap().trim().to_string();
 
-    let seconds = 100;
-    let width = 101;
-    let height = 103;
+    const SECONDS: i32 = 100;
+    const WIDTH: i32 = 101;
+    const HEIGHT: i32 = 103;
 
     let mut robots = Robots::new(
         contents.lines().map(Robot::from).collect::<Vec<Robot>>(),
-        width,
-        height,
+        WIDTH,
+        HEIGHT,
     );
 
-    robots.simulate(seconds);
+    robots.simulate(SECONDS);
 
     // println!("{}", robots);
 
@@ -142,6 +178,29 @@ fn main() {
 
     println!("Solution (Part 1): {}", result);
 }
+
+// fn main() {
+//     let file_path = "./d14-restroom-redoubt/input.txt";
+//     let contents = fs::read_to_string(file_path).unwrap().trim().to_string();
+
+//     const SECONDS: i32 = 10000;
+//     const WIDTH: i32 = 101;
+//     const HEIGHT: i32 = 103;
+
+//     let mut robots = Robots::new(
+//         contents.lines().map(Robot::from).collect::<Vec<Robot>>(),
+//         WIDTH,
+//         HEIGHT,
+//     );
+
+//     robots.simulate(SECONDS);
+
+//     // println!("{}", robots);
+
+//     let result = robots.calculate_safety_factor();
+
+//     println!("Solution (Part 1): {}", result);
+// }
 
 #[cfg(test)]
 mod tests {
