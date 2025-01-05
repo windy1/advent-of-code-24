@@ -13,5 +13,6 @@ members = [
     "d9-disk-fragmenter",
     "d10-hoof-it",
     "d11-plutonian-pebbles",
+    "d14-restroom-redoubt",
     "d22-monkey-market"
 ]
